@@ -1,11 +1,10 @@
 import com.mongodb.casbah.Imports._
-import com.mongodb.casbah.commons.Imports._
 import scalaj.http._
 
 object find extends App {
+
     val collection = MongoFactory.collection
     
-
     // find all pbdb_ocr
     //println("\n __All PBDB OCR__")
     //var pbdb = collection.find
@@ -13,26 +12,70 @@ object find extends App {
 
     // Find with limit
     println("\n Find 2")
-    //var pbdb = collection.findOne() match {
-    //  case Some(result) => {
-    //      var pbref = result.get("ref")
-    //      for(name <- pbref("sci_names")) {
-    //        var parts = name.split(" ")
-    //        println("first part: " + parts(0))
-    //      }
-    //  }
-    //  case None => println("Not Found")
-    //}
-
-    var pbdb = collection.find().limit(2)
+    //var refs = scala.collection.mutable.ArrayBuffer()
+    var pbdb = collection.find().limit(5)
     for (pb <- pbdb) {
-       //println(pb)
+      
+        /*val id = pb.getAs[String]("_id")
+        val ocr_text = pb.getAs[String]("ocr_text")
+        val ref = pb.getAs[MongoDBObject]("ref")
+        val doi = pb.getAs[String]("ref.doi")
+        val other_auth = pb.getAs[String]("ref.otherauth")
+        val sci_names = pb.getAs[BasicDBList]("ref.sci_names")
+        val pid  = pb.getAs[String]("ref.pid")
+        val pubtitle = pb.getAs[String]("ref.pubtitle")
+        val volume = pb.getAs[String]("ref.volume")
+        val countries = pb.getAs[BasicDBList]("ref.countries")
+        val states = pb.getAs[BasicDBList]("ref.states")
+        val author1 = pb.getAs[String]("ref.author1")
+        val author2 = pb.getAs[String]("ref.author2")
+        val pubyear = pb.getAs[String]("ref.pubyear")
+        val issue = pb.getAs[String]("ref.issue")
+        val counties = pb.getAs[BasicDBList]("ref.counties")*/
 
-       var ref = pb.get("ref")
-       val dbref: MongoDbObject = DBObject(ref)
+        val id            = pb.get("_id")
+        val ocr_text      = pb.get("ocr_text")
+        val ref_title     = pb.getAs[MongoDBObject]("ref").get("title")
+        val ref_doi       = pb.getAs[MongoDBObject]("ref").get("doi")
+        val ref_otherauth = pb.getAs[MongoDBObject]("ref").get("otherauth")
+        val ref_scinames  = pb.getAs[MongoDBObject]("ref").get("sci_names")
+        val ref_pid       = pb.getAs[MongoDBObject]("ref").get("pid")
+        val ref_pubtitle  = pb.getAs[MongoDBObject]("ref").get("pubtitle")
+        val ref_volume    = pb.getAs[MongoDBObject]("ref").get("volume")
+        val ref_countries = pb.getAs[MongoDBObject]("ref").get("countries")
+        val ref_states    = pb.getAs[MongoDBObject]("ref").get("states")
+        val ref_author1   = pb.getAs[MongoDBObject]("ref").get("author1")
+        val ref_author2   = pb.getAs[MongoDBObject]("ref").get("author2")
+        val ref_pubyear   = pb.getAs[MongoDBObject]("ref").get("pubyear")
+        val ref_issue     = pb.getAs[MongoDBObject]("ref").get("issue")
+        val ref_counties  = pb.getAs[MongoDBObject]("ref").get("counties")
 
-       val sci_names = dbref.as[DbObject]("sci_names")
-       println("sci_names" + sci_names)
+        println("ID: " + id)
+        println("PID: " + ref_pid)
+        println("doi: " + ref_doi)
+
+        println("ref title: " + ref_title )
+        println("ref pubtitle: " + ref_pubtitle )
+        println("ref author1: " + ref_author1)
+        println("ref author2: " + ref_author2)
+        println("sci names: " + ref_scinames.toString())
+        //println("OCR TEXT: " + ocr_text)
+        println("\n\n")
+    }
+
+    
+
+
+    // {
+       //var ref = pb.get("ref")
+       //var pid = pb.get("ref.pid")
+
+       //println("ID: " + pid);
+
+       //val dbref: MongoDbObject = DBObject(ref)
+
+       //val sci_names = dbref.as[DbObject]("sci_names")
+       //println("sci_names" + sci_names)
 
        //println("ref Class: " + ref.getClass)
        //println("ref: " + ref)
@@ -42,7 +85,7 @@ object find extends App {
        //for (name <- sci_names) {
        //    println("\nName: " + name)
        //}
-    }
+    //}
 
     // TODO:
     // Step through ref:sci_names [], break names on space
